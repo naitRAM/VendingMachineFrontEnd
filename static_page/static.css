@@ -1,0 +1,24 @@
+.margin-bottom-20 {
+    margin-bottom: 20px;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0px;
+}
+
+#purchaseInput {
+    width: 100%;
+    margin: 0 auto;
+}
+
+#changeOutput {
+    width: 68%;
+    margin: 0 auto;
+}
+
+
+
