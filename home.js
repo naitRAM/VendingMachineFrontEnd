@@ -1,6 +1,10 @@
 const rowIds = ['#topItems', '#middleItems', '#bottomItems'];
-const coinToValue = { 'quarters': 0.25, 'dimes': 0.10, 'nickels': 0.05, 'pennies': 0.01 };
+const coinToValue = {'quarters': 0.25, 'dimes': 0.10, 'nickels': 0.05, 'pennies': 0.01};
 const itemsPerRow = 3;
+const moneyInput = $('#moneyInput');
+const itemOutput = $('#itemOutput');
+const messageOutput = $('#messageOutput');
+const changeOutput = $('#changeOutput');
 
 function createItemCard(item) {
     let itemCard = '<div class="col-sm-4">' + '<div class="card vendItem">' + '<div class="card-body">'
@@ -28,15 +32,15 @@ function getInventory() {
 }
 
 function clearInputs() {
-    if ($('#moneyInput').val() == '0.00') {
-        $('#itemOutput').val('');
-        $('#messageOutput').val('');
-        $('#changeOutput').val('');
+    if (moneyInput.val() == '0.00') {
+        itemOutput.val('');
+        messageOutput.val('');
+        changeOutput.val('');
     }
 }
 
 function calculateChange() {
-    let deposit = Number($('#moneyInput').val());
+    let deposit = Number(moneyInput.val());
     let change = {};
     for (coin in coinToValue) {
         const value = coinToValue[coin];
@@ -52,7 +56,6 @@ function calculateChange() {
 }
 
 function editInventory() {
-    const moneyInput = $('#moneyInput');
     for (const coinId in coinToValue) {
         $("#" + coinId).on('click', function (e) {
             e.preventDefault();
@@ -67,14 +70,12 @@ function editInventory() {
         e.preventDefault();
         clearInputs();
         showChange(calculateChange());
-        $("#moneyInput").val('');
+        moneyInput.val('');
         getInventory();
     });
     $('#purchaseButton').on('click', function (e) {
-        const itemOutput = $('#itemOutput');
         const itemId = itemOutput.val();
-        const messageOutput = $('#messageOutput');
-        const money = $('#moneyInput').val();
+        const money = moneyInput.val();
         e.preventDefault();
         if (!itemId) {
             messageOutput.val('Please make a selection');
@@ -84,7 +85,7 @@ function editInventory() {
                 contentType: 'application/json',
                 url: 'http://vending.us-east-1.elasticbeanstalk.com/money/' + money + '/item/' + itemId,
                 success: function (change, textStatus, jqXHR) {
-                    $('#moneyInput').val('');
+                    moneyInput.val('');
                     messageOutput.val("Thank You!!");
                     showChange(change);
                     getInventory();
@@ -100,7 +101,7 @@ function editInventory() {
 }
 
 function showChange(change) {
-        $('#changeOutput').val(returnChange(change));
+        changeOutput.val(returnChange(change));
 }
 
 function clearInventory() {
@@ -133,9 +134,8 @@ function loadInventory(inventoryItems) {
     $('.vendItem').on('click', function () {
         const itemId = $(this).find('.id').text();
         clearInputs();
-        $('#itemOutput').val(itemId);
+        itemOutput.val(itemId);
     });
-    const moneyInput = $('#moneyInput');
     const money = moneyInput.val();
     if (!money) {
         moneyInput.val("0.00");
